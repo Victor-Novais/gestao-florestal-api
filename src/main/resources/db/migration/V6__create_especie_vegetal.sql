@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS especie_vegetal (
-                                               id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                                               id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     nome_cientifico VARCHAR(255) NOT NULL UNIQUE,
     nome_popular VARCHAR(255),
     familia_botanica VARCHAR(255),

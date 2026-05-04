@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS area_florestal (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     identificador_unico VARCHAR(50) NOT NULL UNIQUE,
     nome VARCHAR(100) NOT NULL,
     latitude DECIMAL(10,6) NOT NULL,
