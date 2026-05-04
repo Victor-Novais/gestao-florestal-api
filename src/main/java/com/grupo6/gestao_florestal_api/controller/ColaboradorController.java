@@ -24,13 +24,13 @@ public class ColaboradorController {
     private final ColaboradorService colaboradorService;
 
     @PostMapping
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ColaboradorResponseDTO> criar(@Valid @RequestBody ColaboradorRequestDTO dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(colaboradorService.criar(dto));
     }
 
     @GetMapping
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Page<ColaboradorResponseDTO>> listar(
             @RequestParam(required = false) FuncaoColaborador funcao,
             @RequestParam(required = false) String areaAtuacao,
@@ -41,13 +41,13 @@ public class ColaboradorController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ColaboradorResponseDTO> buscarPorId(@PathVariable UUID id) {
         return ResponseEntity.ok(colaboradorService.buscarPorId(id));
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ColaboradorResponseDTO> atualizar(
             @PathVariable UUID id,
             @Valid @RequestBody ColaboradorRequestDTO dto
@@ -56,7 +56,7 @@ public class ColaboradorController {
     }
 
     @PatchMapping("/{id}/status")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ColaboradorResponseDTO> alterarStatus(
             @PathVariable UUID id,
             @RequestParam boolean ativo

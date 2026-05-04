@@ -72,7 +72,7 @@ public class SecurityConfig {
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
 
                         //  regras do cenário
-                        .requestMatchers("/colaboradores/**").hasRole("ADMIN")
+                        .requestMatchers("/api/colaboradores/**").hasRole("ADMIN")
                         .requestMatchers("/areas/**").hasAnyRole("ADMIN", "COLABORADOR")
 
                         //  resto protegido
