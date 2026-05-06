@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.Optional;
 import java.util.UUID;
+import java.util.List;
 
 public interface ColaboradorRepository extends JpaRepository<Colaborador, UUID> {
 
@@ -35,4 +36,6 @@ public interface ColaboradorRepository extends JpaRepository<Colaborador, UUID> 
     );
 
     Optional<Colaborador> findByUserUsername(String username);
+
+    List<Colaborador> findByAtivoTrueOrderByNomeCompletoAsc();
 }

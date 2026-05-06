@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -38,6 +39,12 @@ public class ColaboradorController {
             @PageableDefault(size = 20, sort = "nomeCompleto") Pageable pageable
     ) {
         return ResponseEntity.ok(colaboradorService.listar(funcao, areaAtuacao, ativo, pageable));
+    }
+
+    @GetMapping("/ativos")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<List<ColaboradorResponseDTO>> listarAtivos() {
+        return ResponseEntity.ok(colaboradorService.listarAtivos());
     }
 
     @GetMapping("/{id}")

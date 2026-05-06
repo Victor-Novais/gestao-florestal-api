@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.UUID;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -91,6 +92,14 @@ public class ColaboradorService {
         return colaboradorRepository
                 .findWithFilters(funcao, areaAtuacao, ativo, pageable)
                 .map(ColaboradorResponseDTO::from);
+    }
+
+    @Transactional(readOnly = true)
+    public List<ColaboradorResponseDTO> listarAtivos() {
+        return colaboradorRepository.findByAtivoTrueOrderByNomeCompletoAsc()
+                .stream()
+                .map(ColaboradorResponseDTO::from)
+                .toList();
     }
 
     @Transactional(readOnly = true)

@@ -40,7 +40,7 @@ public interface EquipamentoInsumoRepository extends JpaRepository<EquipamentoIn
     @Query("""
             SELECT e FROM EquipamentoInsumo e
             WHERE (:categoria IS NULL OR e.categoria = :categoria)
-              AND (:localizacao IS NULL OR LOWER(e.localizacaoAtual) LIKE LOWER(CONCAT('%', :localizacao, '%')))
+              AND (:localizacao IS NULL OR LOWER(e.localizacaoAtual) LIKE CONCAT('%', LOWER(CAST(COALESCE(:localizacao, '') AS string)), '%'))
               AND (:ativo IS NULL OR e.ativo = :ativo)
             """)
     Page<EquipamentoInsumo> findWithFilters(
