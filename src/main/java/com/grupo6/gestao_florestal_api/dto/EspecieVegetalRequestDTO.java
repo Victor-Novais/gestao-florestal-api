@@ -1,5 +1,6 @@
 package com.grupo6.gestao_florestal_api.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.grupo6.gestao_florestal_api.domain.enums.Porte;
 import com.grupo6.gestao_florestal_api.domain.enums.StatusConservacao;
 import jakarta.validation.constraints.NotBlank;
@@ -33,6 +34,7 @@ public class EspecieVegetalRequestDTO {
     @NotNull(message = "Status de conservação é obrigatório")
     private StatusConservacao statusConservacao;
 
+    @JsonProperty("cicloVida")
     @Positive(message = "Ciclo de vida deve ser um número positivo")
     private Integer cicloVidaAnos;
 
