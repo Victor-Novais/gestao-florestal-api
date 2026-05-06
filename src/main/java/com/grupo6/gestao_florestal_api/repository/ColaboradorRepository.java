@@ -24,7 +24,7 @@ public interface ColaboradorRepository extends JpaRepository<Colaborador, UUID> 
     @Query("""
             SELECT c FROM Colaborador c
             WHERE (:funcao IS NULL OR c.funcao = :funcao)
-              AND (:areaAtuacao IS NULL OR LOWER(c.areaAtuacao) LIKE LOWER(CONCAT('%', :areaAtuacao, '%')))
+              AND (:areaAtuacao IS NULL OR LOWER(c.areaAtuacao) LIKE CONCAT('%', LOWER(CAST(COALESCE(:areaAtuacao, '') AS string)), '%'))
               AND (:ativo IS NULL OR c.ativo = :ativo)
             """)
     Page<Colaborador> findWithFilters(
