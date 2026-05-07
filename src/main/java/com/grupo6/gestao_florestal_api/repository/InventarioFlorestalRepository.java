@@ -52,8 +52,8 @@ public interface InventarioFlorestalRepository extends JpaRepository<InventarioF
         LEFT JOIN FETCH ie.especieVegetal
         JOIN FETCH i.areaFlorestal
         JOIN FETCH i.colaborador
-        WHERE (:dataInicio IS NULL OR i.dataVistoria >= :dataInicio)
-          AND (:dataFim IS NULL OR i.dataVistoria <= :dataFim)
+        WHERE (CAST(:dataInicio AS date) IS NULL OR i.dataVistoria >= :dataInicio)
+          AND (CAST(:dataFim AS date) IS NULL OR i.dataVistoria <= :dataFim)
         ORDER BY i.dataVistoria DESC
     """)
     List<InventarioFlorestal> buscarProdutividade(

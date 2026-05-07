@@ -34,8 +34,8 @@ public interface OcorrenciaRepository extends JpaRepository<Ocorrencia, UUID> {
             FROM Ocorrencia o
             JOIN FETCH o.areaFlorestal
             JOIN FETCH o.colaborador
-            WHERE (:inicio IS NULL OR o.dataRegistro >= :inicio)
-              AND (:fim IS NULL OR o.dataRegistro <= :fim)
+            WHERE (CAST(:inicio AS timestamp) IS NULL OR o.dataRegistro >= :inicio)
+              AND (CAST(:fim AS timestamp) IS NULL OR o.dataRegistro <= :fim)
             ORDER BY o.dataRegistro DESC
             """)
     List<Ocorrencia> buscarProdutividade(
