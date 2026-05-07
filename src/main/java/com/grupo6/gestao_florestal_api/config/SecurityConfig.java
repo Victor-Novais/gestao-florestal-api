@@ -73,7 +73,7 @@ public class SecurityConfig {
 
                         //  regras do cenário
                         .requestMatchers("/api/colaboradores/**").hasRole("ADMIN")
-                        .requestMatchers("/areas/**").hasAnyRole("ADMIN", "COLABORADOR")
+                        .requestMatchers(HttpMethod.GET, "/api/areas", "/api/areas/**").hasAnyRole("ADMIN", "COLABORADOR")
 
                         //  resto protegido
                         .anyRequest().authenticated()

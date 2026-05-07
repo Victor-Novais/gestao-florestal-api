@@ -2,8 +2,11 @@ package com.grupo6.gestao_florestal_api.domain.enums;
 
 public enum MetodoPlantio {
     COVEAMENTO,
-    SULCAMENTO,
+    HIDROSSEMEADURA,
+    MANUAL,
+    MECANIZADO,
+    OUTRO,
     SEMEADURA_DIRETA,
-    TRANSPLANTIO,
-    OUTRO
+    SULCAMENTO,
+    TRANSPLANTIO
 }

@@ -18,8 +18,8 @@ public interface RegistroPlantioRepository extends JpaRepository<RegistroPlantio
             WHERE (:areaId IS NULL OR r.areaFlorestal.id = :areaId)
               AND (:especieId IS NULL OR r.especieVegetal.id = :especieId)
               AND (:colaboradorId IS NULL OR r.colaborador.id = :colaboradorId)
-              AND (:inicio IS NULL OR r.dataHora >= :inicio)
-              AND (:fim IS NULL OR r.dataHora <= :fim)
+              AND r.dataHora >= COALESCE(:inicio, r.dataHora)
+              AND r.dataHora <= COALESCE(:fim, r.dataHora)
             """)
     Page<RegistroPlantio> findWithFilters(
             @Param("areaId") UUID areaId,
@@ -60,8 +60,8 @@ public interface RegistroPlantioRepository extends JpaRepository<RegistroPlantio
             JOIN FETCH r.areaFlorestal
             JOIN FETCH r.especieVegetal
             JOIN FETCH r.colaborador
-            WHERE (:inicio IS NULL OR r.dataHora >= :inicio)
-              AND (:fim IS NULL OR r.dataHora <= :fim)
+            WHERE r.dataHora >= COALESCE(:inicio, r.dataHora)
+              AND r.dataHora <= COALESCE(:fim, r.dataHora)
             ORDER BY r.dataHora DESC
             """)
     List<RegistroPlantio> buscarProdutividade(

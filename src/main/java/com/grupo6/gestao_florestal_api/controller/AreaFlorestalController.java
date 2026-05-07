@@ -36,13 +36,13 @@ public class AreaFlorestalController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'COLABORADOR')")
     public ResponseEntity<AreaFlorestalResponseDTO> buscarPorId(@PathVariable UUID id) {
         return ResponseEntity.ok(areaService.buscarPorId(id));
     }
 
     @GetMapping
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'COLABORADOR')")
     public ResponseEntity<Page<AreaFlorestalResponseDTO>> listar(
             @RequestParam(required = false) StatusArea status,
             @RequestParam(required = false) Bioma bioma,
