@@ -54,7 +54,7 @@ public interface AreaFlorestalRepository extends JpaRepository<AreaFlorestal, UU
             SUM(a.tamanho_hectares) as totalHectares
         FROM area_florestal a
         WHERE a.ativo = true
-        AND (CAST(:status AS text) IS NULL OR a.status = CAST(:status AS text))
+        AND (CAST(:status AS text) IS NULL OR CAST(a.status AS text) = CAST(:status AS text))
         GROUP BY a.bioma_predominante, a.tipo_floresta
         ORDER BY a.bioma_predominante, a.tipo_floresta
     """, nativeQuery = true)

@@ -46,13 +46,13 @@ public class ColaboradorService {
             if (dto.senhaAcesso() == null || dto.senhaAcesso().isBlank()) {
                 throw new BusinessException("Senha e obrigatoria ao criar acesso");
             }
-            if (dto.emailAcesso() == null || dto.emailAcesso().isBlank()) {
-                throw new BusinessException("Email de acesso e obrigatorio ao criar acesso");
-            }
+            String emailAcesso = (dto.emailAcesso() == null || dto.emailAcesso().isBlank())
+                    ? dto.cpf().replaceAll("\\D", "") + "@sem-email.local"
+                    : dto.emailAcesso();
             if (userRepository.findByUsername(dto.cpf()).isPresent()) {
                 throw new BusinessException("Ja existe um usuario com este CPF como username");
             }
-            if (userRepository.existsByEmail(dto.emailAcesso())) {
+            if (userRepository.existsByEmail(emailAcesso)) {
                 throw new BusinessException("Ja existe um usuario com este email");
             }
 
@@ -61,7 +61,7 @@ public class ColaboradorService {
 
             user = new User();
             user.setUsername(dto.cpf());
-            user.setEmail(dto.emailAcesso());
+            user.setEmail(emailAcesso);
             user.setPassword(passwordEncoder.encode(dto.senhaAcesso()));
             user.setActive(true);
             user.setCreatedAt(LocalDateTime.now());
