@@ -18,11 +18,13 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -38,9 +40,23 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
 
     public LoginResponseDTO login(LoginRequestDTO request) {
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.login(), request.password())
-        );
+        Authentication authentication = null;
+        AuthenticationException lastException = null;
+
+        for (String candidateLogin : buildLoginCandidates(request.login())) {
+            try {
+                authentication = authenticationManager.authenticate(
+                        new UsernamePasswordAuthenticationToken(candidateLogin, request.password())
+                );
+                break;
+            } catch (AuthenticationException ex) {
+                lastException = ex;
+            }
+        }
+
+        if (authentication == null && lastException != null) {
+            throw lastException;
+        }
 
         User user = findByUsername(authentication.getName());
         List<String> roles = extractRoles(authentication);
@@ -111,6 +127,23 @@ public class AuthService {
         return authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .toList();
+    }
+
+    private List<String> buildLoginCandidates(String rawLogin) {
+        LinkedHashSet<String> candidates = new LinkedHashSet<>();
+        String login = rawLogin != null ? rawLogin.trim() : "";
+        if (!login.isBlank()) {
+            candidates.add(login);
+        }
+
+        String digits = login.replaceAll("\\D", "");
+        if (digits.length() == 11) {
+            candidates.add(digits);
+            String maskedCpf = digits.replaceFirst("(\\d{3})(\\d{3})(\\d{3})(\\d{2})", "$1.$2.$3-$4");
+            candidates.add(maskedCpf);
+        }
+
+        return candidates.stream().toList();
     }
 
     private AuthMeResponseDTO toAuthMeResponse(User user) {

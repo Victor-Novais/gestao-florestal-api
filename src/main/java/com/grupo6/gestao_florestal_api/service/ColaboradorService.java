@@ -49,8 +49,8 @@ public class ColaboradorService {
             String emailAcesso = (dto.emailAcesso() == null || dto.emailAcesso().isBlank())
                     ? dto.cpf().replaceAll("\\D", "") + "@sem-email.local"
                     : dto.emailAcesso();
-            if (userRepository.findByUsername(dto.cpf()).isPresent()) {
-                throw new BusinessException("Ja existe um usuario com este CPF como username");
+            if (userRepository.findByUsername(dto.matricula()).isPresent()) {
+                throw new BusinessException("Ja existe um usuario com esta matricula como username");
             }
             if (userRepository.existsByEmail(emailAcesso)) {
                 throw new BusinessException("Ja existe um usuario com este email");
@@ -60,7 +60,7 @@ public class ColaboradorService {
                     .orElseThrow(() -> new EntityNotFoundException("Role ROLE_COLABORADOR nao encontrada"));
 
             user = new User();
-            user.setUsername(dto.cpf());
+            user.setUsername(dto.matricula());
             user.setEmail(emailAcesso);
             user.setPassword(passwordEncoder.encode(dto.senhaAcesso()));
             user.setActive(true);
