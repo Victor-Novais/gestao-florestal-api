@@ -25,13 +25,13 @@ public class PlantioController {
     private final PlantioService plantioService;
 
     @PostMapping
-    @PreAuthorize("hasAnyRole('ROLE_COLABORADOR', 'ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('COLABORADOR', 'ADMIN')")
     public ResponseEntity<PlantioResponseDTO> registrar(@Valid @RequestBody PlantioRequestDTO dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(plantioService.registrar(dto));
     }
 
     @GetMapping
-    @PreAuthorize("hasAnyRole('ROLE_COLABORADOR', 'ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('COLABORADOR', 'ADMIN')")
     public ResponseEntity<Page<PlantioResponseDTO>> listar(
             @RequestParam(required = false) UUID areaId,
             @RequestParam(required = false) UUID especieId,
@@ -44,7 +44,7 @@ public class PlantioController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ROLE_COLABORADOR', 'ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('COLABORADOR', 'ADMIN')")
     public ResponseEntity<PlantioResponseDTO> buscarPorId(@PathVariable UUID id) {
         return ResponseEntity.ok(plantioService.buscarPorId(id));
     }

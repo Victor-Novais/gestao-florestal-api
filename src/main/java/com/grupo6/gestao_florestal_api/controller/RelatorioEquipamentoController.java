@@ -22,14 +22,14 @@ public class RelatorioEquipamentoController {
 
     // Inventário completo com statusEstoque: OK, BAIXO ou CRITICO
     @GetMapping("/inventario")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<InventarioEquipamentoDTO>> inventario() {
         return ResponseEntity.ok(relatorioService.inventario());
     }
 
     // Itens com previsão de vencimento nos próximos N dias (default 30), ordenados por diasRestantes ASC
     @GetMapping("/previsao-reposicao")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<PrevisaoReposicaoDTO>> previsaoReposicao(
             @RequestParam(defaultValue = "30") int diasParaVencer
     ) {

@@ -9,6 +9,7 @@ import com.grupo6.gestao_florestal_api.dto.RefreshRequestDTO;
 import com.grupo6.gestao_florestal_api.dto.RefreshResponseDTO;
 import com.grupo6.gestao_florestal_api.dto.RegisterRequestDTO;
 import com.grupo6.gestao_florestal_api.exception.BusinessException;
+import com.grupo6.gestao_florestal_api.repository.ColaboradorRepository;
 import com.grupo6.gestao_florestal_api.repository.RoleRepository;
 import com.grupo6.gestao_florestal_api.repository.UserRepository;
 import com.grupo6.gestao_florestal_api.security.CustomUserDetailsService;
@@ -27,6 +28,7 @@ import java.time.LocalDateTime;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -36,6 +38,7 @@ public class AuthService {
     private final JwtTokenProvider jwtTokenProvider;
     private final CustomUserDetailsService userDetailsService;
     private final UserRepository userRepository;
+    private final ColaboradorRepository colaboradorRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
 
@@ -70,6 +73,7 @@ public class AuthService {
                 jwtTokenProvider.getExpiration(),
                 user.getUsername(),
                 user.getEmail(),
+                resolveColaboradorId(user),
                 roles
         );
     }
@@ -150,7 +154,14 @@ public class AuthService {
         return new AuthMeResponseDTO(
                 user.getUsername(),
                 user.getEmail(),
+                resolveColaboradorId(user),
                 user.getRoles().stream().map(Role::getName).toList()
         );
+    }
+
+    private UUID resolveColaboradorId(User user) {
+        return colaboradorRepository.findByUserUsername(user.getUsername())
+                .map(c -> c.getId())
+                .orElse(null);
     }
 }

@@ -26,7 +26,7 @@ public class RelatorioPlantioController {
     // Confirmação completa do registro com número de protocolo
     // COLABORADOR acessa só o próprio; ADMIN acessa qualquer um
     @GetMapping("/confirmacao/{id}")
-    @PreAuthorize("hasAnyRole('ROLE_COLABORADOR', 'ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('COLABORADOR', 'ADMIN')")
     public ResponseEntity<ConfirmacaoPlantioDTO> confirmacao(
             @PathVariable UUID id,
             Authentication auth
@@ -37,7 +37,7 @@ public class RelatorioPlantioController {
     // Total de mudas no período + percentual da meta
     // COLABORADOR acessa só os próprios registros; ADMIN acessa todos
     @GetMapping("/acumulado-mensal")
-    @PreAuthorize("hasAnyRole('ROLE_COLABORADOR', 'ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('COLABORADOR', 'ADMIN')")
     public ResponseEntity<AcumuladoMensalDTO> acumuladoMensal(
             @RequestParam UUID colaboradorId,
             @RequestParam int mes,
@@ -50,7 +50,7 @@ public class RelatorioPlantioController {
     // CRUD de metas — somente ADMIN
 
     @PostMapping("/metas")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<MetaPlantioResponseDTO> criarMeta(
             @Valid @RequestBody MetaPlantioRequestDTO dto
     ) {
@@ -58,7 +58,7 @@ public class RelatorioPlantioController {
     }
 
     @GetMapping("/metas")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<MetaPlantioResponseDTO>> listarMetas() {
         return ResponseEntity.ok(relatorioService.listarMetas());
     }

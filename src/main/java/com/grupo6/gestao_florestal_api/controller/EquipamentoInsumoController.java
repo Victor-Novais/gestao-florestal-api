@@ -26,14 +26,14 @@ public class EquipamentoInsumoController {
     private final EquipamentoInsumoService equipamentoService;
 
     @PostMapping
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<EquipamentoInsumoResponseDTO> criar(
             @Valid @RequestBody EquipamentoInsumoRequestDTO dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(equipamentoService.criar(dto));
     }
 
     @GetMapping
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Page<EquipamentoInsumoResponseDTO>> listar(
             @RequestParam(required = false) CategoriaEquipamento categoria,
             @RequestParam(required = false) String localizacao,
@@ -44,13 +44,13 @@ public class EquipamentoInsumoController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<EquipamentoInsumoResponseDTO> buscarPorId(@PathVariable UUID id) {
         return ResponseEntity.ok(equipamentoService.buscarPorId(id));
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<EquipamentoInsumoResponseDTO> atualizar(
             @PathVariable UUID id,
             @Valid @RequestBody EquipamentoInsumoRequestDTO dto
@@ -59,7 +59,7 @@ public class EquipamentoInsumoController {
     }
 
     @PatchMapping("/{id}/status")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<EquipamentoInsumoResponseDTO> alterarStatus(
             @PathVariable UUID id,
             @RequestParam boolean ativo
@@ -69,7 +69,7 @@ public class EquipamentoInsumoController {
 
     // Retorna todos os itens com quantidade <= estoqueMinimo, com percentualRestante
     @GetMapping("/alertas-estoque")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<AlertaEstoqueResponseDTO>> alertasEstoque() {
         return ResponseEntity.ok(equipamentoService.listarAlertasEstoque());
     }

@@ -36,7 +36,7 @@ public class EspecieVegetalController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'COLABORADOR')")
     public ResponseEntity<EspecieVegetalResponseDTO> buscarPorId(@PathVariable UUID id) {
         return ResponseEntity.ok(especieService.buscarPorId(id));
     }
@@ -48,7 +48,7 @@ public class EspecieVegetalController {
     }
 
     @GetMapping
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'COLABORADOR')")
     public ResponseEntity<Page<EspecieVegetalResponseDTO>> listar(
             @RequestParam(required = false) StatusConservacao statusConservacao,
             @RequestParam(required = false) Porte porte,
