@@ -25,6 +25,13 @@ public class GlobalExceptionHandler {
                 .body(ErrorResponse.of(404, ex.getMessage(), request.getRequestURI()));
     }
 
+    @ExceptionHandler(jakarta.persistence.EntityNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleJpaNotFound(
+            jakarta.persistence.EntityNotFoundException ex, HttpServletRequest request) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(ErrorResponse.of(404, ex.getMessage(), request.getRequestURI()));
+    }
+
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<ErrorResponse> handleBusiness(
             BusinessException ex, HttpServletRequest request) {

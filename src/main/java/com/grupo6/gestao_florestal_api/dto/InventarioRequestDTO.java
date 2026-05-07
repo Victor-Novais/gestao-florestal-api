@@ -19,6 +19,12 @@ import java.util.UUID;
 @AllArgsConstructor
 public class InventarioRequestDTO {
 
+    /**
+     * Opcional. Usado quando o usuário autenticado não possui Colaborador vinculado
+     * (ex: ADMIN registrando em nome de um colaborador).
+     */
+    private UUID colaboradorId;
+
 
 
     @NotBlank(message = "Número da parcela é obrigatório")

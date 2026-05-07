@@ -4,6 +4,7 @@ import com.grupo6.gestao_florestal_api.domain.Colaborador;
 import com.grupo6.gestao_florestal_api.domain.enums.EstadoGeral;
 import com.grupo6.gestao_florestal_api.dto.InventarioRequestDTO;
 import com.grupo6.gestao_florestal_api.dto.InventarioResponseDTO;
+import com.grupo6.gestao_florestal_api.exception.EntityNotFoundException;
 import com.grupo6.gestao_florestal_api.repository.ColaboradorRepository;
 import com.grupo6.gestao_florestal_api.service.InventarioService;
 import jakarta.validation.Valid;
@@ -20,7 +21,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import org.springframework.format.annotation.DateTimeFormat;
-import jakarta.persistence.EntityNotFoundException;
 
 import java.net.URI;
 import java.util.List;
@@ -41,8 +41,7 @@ public class InventarioController {
             @Valid @RequestBody InventarioRequestDTO dto,
             @AuthenticationPrincipal UserDetails userDetails) {
 
-
-        UUID colaboradorId = buscarColaboradorIdPorUsername(userDetails.getUsername());
+        UUID colaboradorId = resolveColaboradorId(dto, userDetails);
 
         InventarioResponseDTO response = inventarioService.criar(dto, colaboradorId);
 
@@ -89,5 +88,22 @@ public class InventarioController {
                 .map(Colaborador::getId)
                 .orElseThrow(() -> new EntityNotFoundException(
                         "Colaborador não encontrado para o usuário: " + username)); // ← corrigido
+    }
+
+    private UUID resolveColaboradorId(InventarioRequestDTO dto, UserDetails userDetails) {
+        boolean isAdmin = userDetails.getAuthorities().stream()
+                .anyMatch(a -> "ROLE_ADMIN".equals(a.getAuthority()));
+
+        // Colaborador: sempre usa o colaborador vinculado ao usuário
+        if (!isAdmin) {
+            return buscarColaboradorIdPorUsername(userDetails.getUsername());
+        }
+
+        // Admin: pode informar colaboradorId no payload; caso não informe, tenta o vínculo do próprio admin
+        if (dto.getColaboradorId() != null) {
+            return dto.getColaboradorId();
+        }
+
+        return buscarColaboradorIdPorUsername(userDetails.getUsername());
     }
 }
